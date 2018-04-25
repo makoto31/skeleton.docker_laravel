@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  pg:
+    container_name: pg
+    build: 
+      context: ./docker_file
+      dockerfile: Dockerfile_postgres
+    ports: 
+      - 15432:5432
+
+  laravel:
+    container_name: laravel
+    build: 
+      context: ./docker_file
+      dockerfile: Dockerfile_laravel
+    ports: 
+      - 8000:8000
+    depends_on:
+      - pg
+    links:
+      - pg:postgres
+    volumes:
+      - "./src:/www"
+    stdin_open: true

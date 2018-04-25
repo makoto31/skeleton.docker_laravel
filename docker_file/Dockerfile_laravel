@@ -1,0 +1,33 @@
+FROM php:7.2
+
+# 基本
+ARG base_timezone="Asia/Tokyo"
+ARG work_dir="/usr/local/share"
+# Laravel
+ARG php_version="7.2"
+
+# 基本 ###################################
+RUN apt-get update
+
+# locale設定
+RUN apt-get -y install locales
+RUN locale-gen ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
+ENV LC_CTYPE ja_JP.UTF-8
+RUN localedef -f UTF-8 -i ja_JP ja_JP.utf8
+
+# timezone設定
+ENV TZ="${base_timezone}"
+
+# Laravel ###################################
+# Postgresで接続
+RUN apt-get install -y libpq-dev --no-install-recommends
+RUN apt-get install -y zlib1g-dev --no-install-recommends
+RUN docker-php-ext-install pdo pdo_pgsql zip
+RUN rm -rf /var/lib/apt/lists/*
+
+# composerインストール
+RUN curl -sS https://getcomposer.org/installer | php ;mv composer.phar /usr/local/bin/composer;
+
+# ポート解放
+EXPOSE 8000
