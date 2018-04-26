@@ -3,11 +3,13 @@ FROM php:7.2
 # 基本
 ARG base_timezone="Asia/Tokyo"
 ARG work_dir="/usr/local/share"
+ARG DEBIAN_FRONTEND=noninteractive
 # Laravel
 ARG php_version="7.2"
 
 # 基本 ###################################
 RUN apt-get update
+RUN apt-get -y install apt-utils --no-install-recommends
 
 # locale設定
 RUN apt-get -y install locales
